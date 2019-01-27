@@ -3,7 +3,7 @@ package AC500Convert
 import "fmt"
 import "io/ioutil"
 import "regexp"
-import "strconv"
+
 import "strings"
 
 func Openfile(path string) (string, error) {
@@ -36,12 +36,8 @@ func ExtractData(input []string) ([]VARS, error) {
 				if regstr.MatchString(row) {
 					rowdata := regstr.FindStringSubmatch(row)
 					tvars.tag = rowdata[1]
-					iadress, err := strconv.Atoi(rowdata[2])
-					if err != nil {
-						return nil, err
-
-					}
-					tvars.adress = iadress
+					//iadress, err := strconv.Atoi(rowdata[2])
+					tvars.adress = fmt.Sprintf("R%05s", rowdata[2])
 					tvars.datatype = regmap[strings.ToUpper(rowdata[3])]
 					tvars.globaldatatype = regglobmap[strings.ToUpper(rowdata[3])]
 					tvars.comment = rowdata[4]
@@ -55,17 +51,12 @@ func ExtractData(input []string) ([]VARS, error) {
 				if bitstr.MatchString(row) {
 					rowdata := bitstr.FindStringSubmatch(row)
 					tvars.tag = rowdata[1]
-					iadress, err := strconv.Atoi(rowdata[2])
-					if err != nil {
-						return nil, err
-
-					}
-					tvars.adress = iadress
+					//iadress, err := strconv.Atoi(rowdata[2])
+					tvars.adress = fmt.Sprintf("%05s", rowdata[2])
 					tvars.datatype = bitmap[strings.ToUpper(rowdata[3])]
 					tvars.globaldatatype = bitglobmap[strings.ToUpper(rowdata[3])]
 					tvars.comment = rowdata[4]
 					tvars.comment = RmLeadSpace(RemoveStars(tvars.comment))
-					fmt.Println(tvars)
 					vars = append(vars, tvars)
 				}
 			}
@@ -93,17 +84,41 @@ type VARS struct {
 	tag            string
 	datatype       string
 	globaldatatype string
-	adress         int
+	adress         string
 	comment        string
 }
 
 func (v VARS) String() string {
 	//return fmt.Sprintf("Tag: %s\nType: %s\nAdress: %v\nComment: %s\n\n", v.tag, v.datatype, v.adress, v.comment)
-	return fmt.Sprintf("%s,%s,%s,%v,%s\n", v.tag, v.datatype, v.globaldatatype, v.adress, v.comment)
+	return fmt.Sprintf("%s,%s,%s,%v,%s\r", v.tag, v.datatype, v.globaldatatype, v.adress, v.comment)
 }
 
 func RmLeadSpace(s string) string {
 	r := regexp.MustCompile(`^\s*`)
 	s = r.ReplaceAllString(s, "")
 	return s
+}
+
+func GenerateAccess(s []string) string {
+	var res string
+	var rnum int = 1
+	var bnum int = 1
+
+	for _, row := range s {
+		if strings.Contains(row, "BOOL;") || strings.Contains(row, "bool;") {
+			//fmt.Println("bool")
+			split := strings.Split(row, ":")
+			res += fmt.Sprintf("%sAT %%RX0.%v.0:%s\n", split[0], bnum, split[1])
+			bnum++
+		}
+		if strings.Contains(row, "UINT;") || strings.Contains(row, "uint;") || strings.Contains(row, "WORD;") || strings.Contains(row, "word;") {
+			//fmt.Println("reg")
+			split := strings.Split(row, ":")
+			res += fmt.Sprintf("%sAT %%RW0.%v:%s\n", split[0], rnum, split[1])
+			rnum++
+		}
+
+	}
+	return res
+
 }
