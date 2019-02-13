@@ -34,10 +34,10 @@ func TestGenerateAccess(t *testing.T) {
 		"var2:bool;(*kommentar2*)",
 		"var3:uint;           (*uint*)",
 	}
-	want := "var1 AT %RX0.1.0:BOOL;(*kommentar*)\n var2 AT %RX0.2.0:BOOL;(*kommentar2*)\n var3 AT %RW1.0:UINT;           (*uint*)"
+	want := "var1  AT %RX0.1.0:BOOL;(*kommentar*)\nvar2 AT %RX0.2.0:BOOL;(*kommentar2*)\nvar3 AT %RW1.0:UINT;         (*uint*)"
 	got := GenerateAccess(istr)
 
 	if got != want {
-		t.Fatalf("Got: %v\nWant:%v\n", got, want)
+		t.Fatalf("Got:\n%v\nWant:\n%v\n", got, want)
 	}
 }
