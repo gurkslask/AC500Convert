@@ -9,8 +9,10 @@ import (
 	"github.com/gurkslask/AC500Convert"
 )
 
+var htmlpath string = "home/alex/go/src/github.com/gurkslask/AC500Convert/web/"
+
 func handler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("./web/index.html")
+	t, err := template.ParseFiles(htmlpath + "index.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,7 +30,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	s := AC500Convert.OutputToText(vars)
 
 	i := &info{Text: s}
-	t, err := template.ParseFiles("./web/view.html")
+	t, err := template.ParseFiles(htmlpath + "view.html")
 	if err != nil {
 		log.Fatal(err)
 	}

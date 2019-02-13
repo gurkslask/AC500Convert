@@ -115,13 +115,13 @@ func GenerateAccess(s []string) string {
 		if strings.Contains(row, "BOOL;") || strings.Contains(row, "bool;") {
 			//fmt.Println("bool")
 			split := strings.Split(row, ":")
-			res += fmt.Sprintf("%s AT %%RX0.%v.0:%s\n", split[0], bnum, strings.ToUpper(split[1]))
+			res += fmt.Sprintf("%s AT %%RX0.%v.0:%s\r", split[0], bnum, strings.ToUpper(split[1]))
 			bnum++
 		}
 		if strings.Contains(row, "UINT;") || strings.Contains(row, "uint;") || strings.Contains(row, "WORD;") || strings.Contains(row, "word;") {
 			//fmt.Println("reg")
 			split := strings.Split(row, ":")
-			res += fmt.Sprintf("%s AT %%RW1.%v:%s\n", split[0], rnum, strings.ToUpper(split[1]))
+			res += fmt.Sprintf("%s AT %%RW1.%v:%s\r", split[0], rnum, strings.ToUpper(split[1]))
 			rnum++
 		}
 		if strings.Contains(row, "BJUMP") {
