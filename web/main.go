@@ -38,9 +38,27 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func genHandler(w http.ResponseWriter, r *http.Request) {
+	in := r.FormValue("gen")
+
+	stext := strings.Split(in, "\n")
+	vars := AC500Convert.GenerateAccess(stext)
+
+	i := &info{Text: vars}
+	t, err := template.ParseFiles("./web/genview.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = t.Execute(w, i)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/upload", uploadHandler)
+	http.HandleFunc("/gen", genHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
