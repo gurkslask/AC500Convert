@@ -31,11 +31,14 @@ func TestExtract(t *testing.T) {
 }
 func TestGenerateAccess(t *testing.T) {
 	istr := []string{"var1 :BOOL;(*kommentar*)",
+		"(* BJUMP 50 *)",
 		"var2:bool;(*kommentar2*)",
 		"var3:uint;           (*uint*)",
+		"(* RJUMP 10 *)",
+		"var4:uint;           (*uint*)",
 	}
-	want := "var1  AT %RX0.1.0:BOOL;(*kommentar*)\nvar2 AT %RX0.2.0:BOOL;(*kommentar2*)\nvar3 AT %RW1.0:UINT;         (*uint*)"
 	got := GenerateAccess(istr)
+	want := "var1  AT %RX0.1.0:BOOL;(*KOMMENTAR*)\nvar2 AT %RX0.52.0:BOOL;(*KOMMENTAR2*)\nvar3 AT %RW1.1:UINT;           (*UINT*)\nvar4 AT %RW1.12:UINT;           (*UINT*)\n"
 
 	if got != want {
 		t.Fatalf("Got:\n%v\nWant:\n%v\n", got, want)
