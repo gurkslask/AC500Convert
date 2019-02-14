@@ -106,29 +106,34 @@ func RmLeadSpace(s string) string {
 	return s
 }
 
-func GenerateAccess(s []string) string {
-	var res string
+func GenerateAccess(s []string) ([]string, error) {
+	//var res string
+	var sres []string
 	var rnum int = 1
 	var bnum int = 1
+	//fmt.Println("BEGIN\n", s)
 
 	for _, row := range s {
-		if strings.Contains(row, "BOOL;") || strings.Contains(row, "bool;") {
+		//fmt.Println(sres + "\n ENDS HERE")
+		if strings.Contains(row, "BOOL") || strings.Contains(row, "bool") {
 			//fmt.Println("bool")
 			split := strings.Split(row, ":")
-			res += fmt.Sprintf("%s AT %%RX0.%v.0:%s\r", split[0], bnum, strings.ToUpper(split[1]))
+			//res += fmt.Sprintf("%s AT %%RX0.%v.0:%s\r", split[0], bnum, strings.ToUpper(split[1]))
+			sres = append(sres, fmt.Sprintf("%s AT %%RX0.%v.0:%s", split[0], bnum, strings.ToUpper(split[1])))
 			bnum++
 		}
-		if strings.Contains(row, "UINT;") || strings.Contains(row, "uint;") || strings.Contains(row, "WORD;") || strings.Contains(row, "word;") {
+		if strings.Contains(row, "UINT") || strings.Contains(row, "uint") || strings.Contains(row, "WORD") || strings.Contains(row, "word") {
 			//fmt.Println("reg")
 			split := strings.Split(row, ":")
-			res += fmt.Sprintf("%s AT %%RW1.%v:%s\r", split[0], rnum, strings.ToUpper(split[1]))
+			//res += fmt.Sprintf("%s AT %%RW1.%v:%s\r", split[0], rnum, strings.ToUpper(split[1]))
+			sres = append(sres, fmt.Sprintf("%s AT %%RW1.%v:%s", split[0], rnum, strings.ToUpper(split[1])))
 			rnum++
 		}
 		if strings.Contains(row, "BJUMP") {
 			split := strings.Split(row, " ")
 			jumpnum, err := strconv.Atoi(split[2])
 			if err != nil {
-				fmt.Println(err)
+				return nil, err
 			}
 			bnum += jumpnum
 		}
@@ -136,11 +141,11 @@ func GenerateAccess(s []string) string {
 			split := strings.Split(row, " ")
 			jumpnum, err := strconv.Atoi(split[2])
 			if err != nil {
-				fmt.Println(err)
+				return nil, err
 			}
 			rnum += jumpnum
 		}
 	}
-	return res
+	return sres, nil
 
 }

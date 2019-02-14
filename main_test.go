@@ -2,6 +2,7 @@ package AC500Convert
 
 import (
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -36,11 +37,29 @@ func TestGenerateAccess(t *testing.T) {
 		"var3:uint;           (*uint*)",
 		"(* RJUMP 10 *)",
 		"var4:uint;           (*uint*)",
+		"var5 : uint ;           (*uint*)",
 	}
-	got := GenerateAccess(istr)
-	want := "var1  AT %RX0.1.0:BOOL;(*KOMMENTAR*)\nvar2 AT %RX0.52.0:BOOL;(*KOMMENTAR2*)\nvar3 AT %RW1.1:UINT;           (*UINT*)\nvar4 AT %RW1.12:UINT;           (*UINT*)\n"
+	got, err := GenerateAccess(istr)
 
-	if got != want {
-		t.Fatalf("Got:\n%v\nWant:\n%v\n", got, want)
+	if err != nil {
+		log.Fatal(err)
 	}
+	want := []string{
+		"var1  AT %RX0.1.0:BOOL;(*KOMMENTAR*)",
+		"var2 AT %RX0.52.0:BOOL;(*KOMMENTAR2*)",
+		"var3 AT %RW1.1:UINT;           (*UINT*)",
+		"var4 AT %RW1.12:UINT;           (*UINT*)",
+		"var5  AT %RW1.13: UINT ;           (*UINT*)",
+	}
+	//want := "var1  AT %RX0.1.0:BOOL;(*KOMMENTAR*)\nvar2 AT %RX0.52.0:BOOL;(*KOMMENTAR2*)\nvar3 AT %RW1.1:UINT;           (*UINT*)\nvar4 AT %RW1.12:UINT;           (*UINT*)\n"
+
+	for key, _ := range want {
+		if got[key] != want[key] {
+			t.Fatalf("Got: %v\nWant: %v\n", got[key], want[key])
+		}
+
+	}
+	/*if got != want {
+		t.Fatalf("Got:\n%v\nWant:\n%v\n", got, want)
+	}*/
 }

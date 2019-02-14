@@ -44,9 +44,17 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 	in := r.FormValue("gen")
 
 	stext := strings.Split(in, "\n")
-	vars := AC500Convert.GenerateAccess(stext)
+	vars, err := AC500Convert.GenerateAccess(stext)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	var svars string
+	for _, i := range vars {
+		svars += i
+	}
 
-	i := &info{Text: vars}
+	i := &info{Text: svars}
 	t, err := template.ParseFiles("./web/genview.html")
 	if err != nil {
 		log.Fatal(err)
