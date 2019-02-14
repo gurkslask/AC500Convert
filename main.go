@@ -72,10 +72,11 @@ func ExtractData(input []string) ([]VARS, error) {
 	return vars, nil
 }
 
-func OutputToText(vars []VARS) string {
-	s := "//\nName,DataType,GlobalDataType,Adress_1,Description //"
+func OutputToText(vars []VARS) []string {
+	var s []string
+	s = append(s, "//\nName,DataType,GlobalDataType,Adress_1,Description //")
 	for _, v := range vars {
-		s += v.String()
+		s = append(s, v.String())
 	}
 	return s
 }

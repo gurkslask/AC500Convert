@@ -1,4 +1,6 @@
 <body>
 <h1>Generated Access variables</h1>
-{{ .Text }}
+{{ range .Text}}
+{{.}}<p>
+{{end}}
 </body>

@@ -9,7 +9,8 @@ import (
 	"github.com/gurkslask/AC500Convert"
 )
 
-var htmlpath string = "home/alex/go/src/github.com/gurkslask/AC500Convert/web/"
+//var htmlpath string = os.Getenv("GOPATH") + "src/github.com/gurkslask/AC500Convert/web/"
+var htmlpath string = "/home/alexander/go/src/github.com/gurkslask/AC500Convert/web/"
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(htmlpath + "index.html")
@@ -29,7 +30,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	s := AC500Convert.OutputToText(vars)
 
-	i := &info{Text: s}
+	i := &infoslice{Text: s}
 	t, err := template.ParseFiles(htmlpath + "view.html")
 	if err != nil {
 		log.Fatal(err)
@@ -49,12 +50,8 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	var svars string
-	for _, i := range vars {
-		svars += i
-	}
 
-	i := &info{Text: svars}
+	i := &infoslice{Text: vars}
 	t, err := template.ParseFiles("./web/genview.html")
 	if err != nil {
 		log.Fatal(err)
@@ -74,4 +71,7 @@ func main() {
 
 type info struct {
 	Text string
+}
+type infoslice struct {
+	Text []string
 }
