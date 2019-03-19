@@ -57,8 +57,11 @@ func ExtractData(input []string) ([]VARS, error) {
 					//fmt.Println(row)
 					rowdata := bitstr.FindStringSubmatch(row)
 					tvars.tag = rowdata[1]
-					//iadress, err := strconv.Atoi(rowdata[2])
-					tvars.adress = fmt.Sprintf("%05s", rowdata[2])
+					iadress, err := strconv.Atoi(rowdata[2])
+					if err != nil {
+						fmt.Println(err)
+					}
+					tvars.adress = fmt.Sprintf("%05o", iadress)
 					tvars.datatype = bitmap[strings.ToUpper(rowdata[3])]
 					tvars.globaldatatype = bitglobmap[strings.ToUpper(rowdata[3])]
 					tvars.comment = rowdata[4]
@@ -74,7 +77,7 @@ func ExtractData(input []string) ([]VARS, error) {
 
 func OutputToText(vars []VARS) []string {
 	var s []string
-	s = append(s, "//\nName,DataType,GlobalDataType,Adress_1,Description //")
+	s = append(s, "//\nName,DataType,GlobalDataType,Address_1,Description //")
 	for _, v := range vars {
 		s = append(s, v.String())
 	}
