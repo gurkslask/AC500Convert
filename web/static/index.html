@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hej</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#comlicon").hide();
+            $("#btncomlicon").click(function(){
+                $("#comlicon").toggle();
+            });
+            $("#comligen").hide();
+            $("#btncomligen").click(function(){
+                $("#comligen").toggle();
+            });
+            $("#modbuscon").hide();
+            $("#btnmodbuscon").click(function(){
+                $("#modbuscon").toggle();
+            });
+            $("#modbusgen").hide();
+            $("#btnmodbusgen").click(function(){
+                $("#modbusgen").toggle();
+            });
+        });
+    </script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+
+<body>
+
+<h1>AC500 Convert</h1>
+
+<br>
+<button type="button" id="btncomlicon" style="width:500px">Convert comli to iX</button>
+<div id="comlicon" >
+<h2>Convert AC500 accessvariables to iX-panel</h2>
+
+        
+<form action="/upload" method="POST">
+<div><textarea name="body" rows="20" cols="80"></textarea></div>
+<div><input type="submit" value="Convert"></div>
+</form>
+</div>
+
+<br>
+<br>
+<button type="button" id="btncomligen" style="width:500px">Genereate comli accessvariables</button>
+<div id="comligen" >
+<h2>Generate accessvariables for AC 500</h2>
+
+<form action="/gen" method="POST">
+<div><textarea name="gen" rows="20" cols="80"></textarea></div>
+<div><input type="submit" value="Generate"></div>
+</form>
+</div>
+
+<br>
+<br>
+<button type="button" id="btnmodbuscon" style="width:500px">Convert modbus to iX</button>
+<div id="modbuscon" style="background-color:lightgrey; border-color:black; border-width:3px">
+<h2>Convert AC500 accessvariables to iX-panel</h2>
+
+        
+<form action="/upload" method="POST">
+<div><textarea name="body" rows="20" cols="80"></textarea></div>
+<div><input type="submit" value="Convert"></div>
+</form>
+</div>
+
+<br>
+<br>
+<button type="button" id="btnmodbusgen" style="width:500px">Genereate modbus accessvariables</button>
+<div id="modbusgen" >
+<h2>Generate accessvariables for AC 500</h2>
+
+<form action="/gen" method="POST">
+<div><textarea name="gen" rows="20" cols="80"></textarea></div>
+<div><input type="submit" value="Generate"></div>
+</form>
+</div>
+</body>
+</html>
