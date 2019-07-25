@@ -11,7 +11,7 @@ import (
 
 //var htmlpath string = os.Getenv("GOPATH") + "src/github.com/gurkslask/AC500Convert/web/"
 //#var htmlpath string = "/home/alexander/go/src/github.com/gurkslask/AC500Convert/web/"
-var htmlpath string = "./web/"
+var htmlpath string = "./web/static/"
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(htmlpath + "index.html")
@@ -24,7 +24,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	in := r.FormValue("body")
 
 	stext := strings.Split(in, "\n")
-	vars, err := AC500Convert.ExtractData(stext)
+	vars, err := AC500Convert.ExtractDataComli(stext)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -46,14 +46,14 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 	in := r.FormValue("gen")
 
 	stext := strings.Split(in, "\n")
-	vars, err := AC500Convert.GenerateAccess(stext)
+	vars, err := AC500Convert.GenerateAccessComli(stext)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	i := &infoslice{Text: vars}
-	t, err := template.ParseFiles("./web/genview.html")
+	t, err := template.ParseFiles(htmlpath + "genview.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +64,8 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", handler)
+	//http.HandleFunc("/", handler)
+	http.Handle("/", http.FileServer(http.Dir("web/static/")))
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/gen", genHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
