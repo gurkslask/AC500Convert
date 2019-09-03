@@ -10,6 +10,7 @@ import (
 )
 
 //var htmlpath string = os.Getenv("GOPATH") + "src/github.com/gurkslask/AC500Convert/web/"
+
 //#var htmlpath string = "/home/alexander/go/src/github.com/gurkslask/AC500Convert/web/"
 var htmlpath string = "./web/static/"
 
