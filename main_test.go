@@ -71,6 +71,10 @@ func TestGenerateAccessModbus(t *testing.T) {
 		"(* RJUMP 10 *)",
 		"var4:uint;           (*uint*)",
 		"var5 : uint ;           (*uint*)",
+		"var5 : uint ;           (*uint*)",
+		"(* RJUMP 10 *)",
+		"var6 : REAL ;           (*real*)",
+		"var7:real ;           (*real*)",
 	}
 	got, err := GenerateAccessModbus(istr)
 
@@ -82,7 +86,8 @@ func TestGenerateAccessModbus(t *testing.T) {
 		"var2 AT %RX0.6.3:BOOL;(*KOMMENTAR2*)",
 		"var3 AT %RW1.1:UINT;           (*UINT*)",
 		"var4 AT %RW1.12:UINT;           (*UINT*)",
-		"var5 AT %RW1.13:UINT ;           (*UINT*)",
+		"var5 AT %RW1.23:REAL ;           (*real*)",
+		"var5 AT %RW1.25:REAL ;           (*real*)",
 	}
 
 	for key, _ := range want {

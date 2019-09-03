@@ -15,8 +15,8 @@ func ExtractDataModbus(input []string) ([]VARS, error) {
 	regstr := regexp.MustCompile(`^\s*(.*) AT %RW1.(\d*):\s*(\w*);(.*)`)
 
 	//Translate datatypes
-	regmap := map[string]string{"UINT": "UINT16", "WORD": "UINT16"}
-	regglobmap := map[string]string{"UINT": "FLOAT", "WORD": "FLOAT"}
+	regmap := map[string]string{"UINT": "UINT16", "WORD": "UINT16", "REAL": "REAL"}
+	regglobmap := map[string]string{"UINT": "FLOAT", "WORD": "FLOAT", "REAL": "FLOAT"}
 	bitmap := map[string]string{"BOOL": "BOOL"}
 	bitglobmap := map[string]string{"BOOL": "DEFAULT"}
 
