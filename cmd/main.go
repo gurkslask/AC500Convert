@@ -19,10 +19,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	vars, err := AC500Convert.ExtractData(stext)
+	rvars, err := AC500Convert.ExtractData(stext)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(AC500Convert.OutputToText(vars))
+	fmt.Println(AC500Convert.OutputToText(rvars))
 
 }
