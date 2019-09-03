@@ -1,12 +1,23 @@
 body {
     background-color: purple;
-
 }
 h1 {
     color:yellow;
     text-shadow: 3px 2px black;
 }
-h2{
+h2 {
     color:yellow;
     text-shadow: 3px 2px black;
+}
+h3 {
+    color:yellow;
+    text-align:left;
+    text_decoration:underline;
+    font-size:0.8em;
+    line-height:0.5;
+}
+div {
+    border:0px;
+    margin:0px;
+    padding:0px;
 }
