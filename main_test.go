@@ -96,6 +96,7 @@ func TestExtractModbus(t *testing.T) {
 	istr := []string{"var1 AT %RX0.0.1:BOOL;(*kommentar*)",
 		"var2 AT %RX0.2.0:BOOL;(*kommentar2*)",
 		"var4 AT %RX0.42.4:BOOL ;(*kommentar2*)",
+		"var5 AT %RX1.42.4:BOOL ;(*kommentar2*)",
 		"var3 AT %RW1.3:UINT;           (*uint*)",
 	}
 
@@ -103,7 +104,8 @@ func TestExtractModbus(t *testing.T) {
 		VARS{tag: "var1", datatype: "BOOL", globaldatatype: "DEFAULT", adress: "00001", comment: "kommentar"},
 		VARS{tag: "var2", datatype: "BOOL", globaldatatype: "DEFAULT", adress: "00016", comment: "kommentar2"},
 		VARS{tag: "var4", datatype: "BOOL", globaldatatype: "DEFAULT", adress: "00340", comment: "kommentar2"},
-		VARS{tag: "var3", datatype: "UINT16", globaldatatype: "FLOAT", adress: "R00003", comment: "uint"},
+		VARS{tag: "var5", datatype: "BOOL", globaldatatype: "DEFAULT", adress: "33108", comment: "kommentar2"},
+		VARS{tag: "var3", datatype: "UINT16", globaldatatype: "FLOAT", adress: "432771", comment: "uint"},
 	}
 
 	got, err := ExtractDataModbus(istr)
