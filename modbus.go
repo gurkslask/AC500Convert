@@ -9,6 +9,7 @@ import (
 
 func ExtractDataModbus(input []string) ([]VARS, error) {
 	// Extracts data from AC500 accessvariables
+	fmt.Println(" Here comes modbus")
 
 	//Regexes
 	bitstr := regexp.MustCompile(`^\s*(.*) AT %RX0.(\d*)\.(\d*):\s*(\w*) *;(.*)`)
@@ -23,6 +24,7 @@ func ExtractDataModbus(input []string) ([]VARS, error) {
 	var vars []VARS
 	for _, row := range input {
 		var tvars VARS
+		//fmt.Println(row)
 		if strings.Contains(row, " AT ") {
 			//Its a communication variable
 			if strings.Contains(row, "%RW") {
@@ -38,8 +40,9 @@ func ExtractDataModbus(input []string) ([]VARS, error) {
 					tvars.globaldatatype = regglobmap[strings.ToUpper(rowdata[3])]
 					tvars.comment = rowdata[4]
 					tvars.comment = RmLeadSpace(RemoveStars(tvars.comment))
-					//fmt.Println(tvars)
+					//fmt.Println("Here is tvars: ", tvars)
 					vars = append(vars, tvars)
+					//fmt.Println("Here is vars: ")
 				}
 
 			}
@@ -70,7 +73,8 @@ func ExtractDataModbus(input []string) ([]VARS, error) {
 			}
 		}
 	}
-	//fmt.Println(vars)
+	//fmt.Println(" Here goes modbus")
+	//fmt.Println(vars[4])
 	return vars, nil
 }
 func GenerateAccessModbus(s []string) ([]string, error) {

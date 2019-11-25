@@ -48,8 +48,12 @@ func RmLeadSpace(s string) string {
 
 func OutputToText(vars []VARS) []string {
 	var s []string
-	s = append(s, "//\nName,DataType,GlobalDataType,Address_1,Description //")
+	/*for _, i := range vars {
+		fmt.Println(i)
+	}*/
+	//s = append(s, "//\nName,DataType,GlobalDataType,Address_1,Description //")
 	for _, v := range vars {
+		fmt.Println(v.String())
 		s = append(s, v.String())
 	}
 	return s

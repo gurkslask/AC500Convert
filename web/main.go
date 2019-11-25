@@ -69,7 +69,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("web/static/")))
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/gen", genHandler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe("192.168.102.53:8080", nil))
 }
 
 type info struct {
