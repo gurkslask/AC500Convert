@@ -21,17 +21,17 @@ func main() {
 		log.Fatal(err)
 	}
 	if *comli {
-
 		if *access {
+			// Access COMLI
 			rvars, err := AC500Convert.GenerateAccessComli(stext)
 			if err != nil {
 				log.Fatal(err)
 			}
-			//fmt.Println(AC500Convert.OutputToText(rvars))
 			for i := 0; i < len(rvars); i++ {
 				fmt.Println(rvars[i])
 			}
 		} else {
+			// csv COMLI
 			fmt.Println(stext)
 			data, err := AC500Convert.ExtractDataComli(stext)
 			if err != nil {
@@ -41,17 +41,17 @@ func main() {
 			fmt.Println(AC500Convert.OutputToText(data))
 		}
 	} else {
-
 		if *access {
+			// Access Modbus
 			rvars, err := AC500Convert.GenerateAccessModbus(stext)
 			if err != nil {
 				log.Fatal(err)
 			}
-			//fmt.Println(AC500Convert.OutputToText(rvars))
 			for i := 0; i < len(rvars); i++ {
 				fmt.Println(rvars[i])
 			}
 		} else {
+			// csv Modbus
 			data, err := AC500Convert.ExtractDataModbus(stext)
 			if err != nil {
 				log.Fatal(err)
