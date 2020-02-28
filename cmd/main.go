@@ -42,7 +42,7 @@ func main() {
 		}
 	} else {
 		if *access {
-			// Access Modbus
+			fmt.Println("Access modbus")
 			rvars, err := AC500Convert.GenerateAccessModbus(stext)
 			if err != nil {
 				log.Fatal(err)
@@ -52,6 +52,7 @@ func main() {
 			}
 		} else {
 			// csv Modbus
+			fmt.Println("csv modbus")
 			data, err := AC500Convert.ExtractDataModbus(stext)
 			if err != nil {
 				log.Fatal(err)
