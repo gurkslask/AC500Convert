@@ -91,19 +91,23 @@ func GenerateAccessComli(s []string) ([]string, error) {
 		}
 		if strings.Contains(row, "BJUMP") {
 			split := strings.Split(row, " ")
-			jumpnum, err := strconv.Atoi(split[2])
-			if err != nil {
-				return nil, err
+			if len(split) > 2 {
+				jumpnum, err := strconv.Atoi(split[2])
+				if err != nil {
+					return nil, err
+				}
+				bnum += jumpnum
 			}
-			bnum += jumpnum
 		}
 		if strings.Contains(row, "RJUMP") {
 			split := strings.Split(row, " ")
-			jumpnum, err := strconv.Atoi(split[2])
-			if err != nil {
-				return nil, err
+			if len(split) > 2 {
+				jumpnum, err := strconv.Atoi(split[2])
+				if err != nil {
+					return nil, err
+				}
+				rnum += jumpnum
 			}
-			rnum += jumpnum
 		}
 	}
 	return sres, nil
