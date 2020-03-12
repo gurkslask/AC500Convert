@@ -40,6 +40,8 @@ func TestGenerateAccessComli(t *testing.T) {
 		"(* RJUMP 10 *)",
 		"var4:uint;           (*uint*)",
 		"var5 : uint ;           (*uint*)",
+		"var5 AT %RW1.42 : uint ;           (*uint*)",
+		"var2 AT %RX0.63.0:bool;(*kommentar2*)",
 	}
 	got, err := GenerateAccessComli(istr)
 
@@ -52,6 +54,8 @@ func TestGenerateAccessComli(t *testing.T) {
 		"var3 AT %RW1.1:UINT;           (*UINT*)",
 		"var4 AT %RW1.12:UINT;           (*UINT*)",
 		"var5 AT %RW1.13:UINT ;           (*UINT*)",
+		"var5 AT %RW1.42:UINT ;           (*UINT*)",
+		"var2 AT %RX0.63.0:BOOL;(*KOMMENTAR2*)",
 	}
 
 	for key, _ := range want {
@@ -70,6 +74,8 @@ func TestGenerateAccessModbus(t *testing.T) {
 		"var3:uint;           (*uint*)",
 		"(* RJUMP 10 *)",
 		"var4:uint;           (*uint*)",
+		"var4 AT %RW1.42:uint;           (*uint*)",
+		"var2 AT %RX0.4.4:bool;(*kommentar2*)",
 		"var5 : uint ;           (*uint*)",
 		"var5 : uint ;           (*uint*)",
 	}
@@ -83,11 +89,13 @@ func TestGenerateAccessModbus(t *testing.T) {
 		"var2 AT %RX0.6.3:BOOL;(*KOMMENTAR2*)",
 		"var3 AT %RW1.1:UINT;           (*UINT*)",
 		"var4 AT %RW1.12:UINT;           (*UINT*)",
+		"var4 AT %RW1.42:UINT;           (*UINT*)",
+		"var2 AT %RX0.4.4:BOOL;(*KOMMENTAR2*)",
 	}
 
 	for key, _ := range want {
 		if got[key] != want[key] {
-			t.Fatalf("Got: %v\nWant: %v\n", got[key], want[key])
+			t.Fatalf("\nGot: %v\nWant: %v\n", got[key], want[key])
 		}
 
 	}

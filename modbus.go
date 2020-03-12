@@ -77,14 +77,38 @@ func GenerateAccessModbus(s []string) ([]string, error) {
 	var rnum int = 1
 	var bnumLow int = 0
 	var bnumHigh int = 0
+	var regstr = regexp.MustCompile(`AT %RW1\.(\d*)\s*:`)
+	var regstrreplace = regexp.MustCompile(`AT %RW1\.\d*\s*`)
+	var bitstr = regexp.MustCompile(`%RX0\.(\d*)\.(\d*)\s*:`)
+	var bitstrreplace = regexp.MustCompile(`AT %RX0\.\d*\.\d*\s*`)
+	var err error
 
-	for _, row := range s {
+	for key, row := range s {
 		if strings.Contains(row, "BOOL") || strings.Contains(row, "bool") {
+			if strings.Contains(row, " AT ") && bitstr.MatchString(row) {
+				res := bitstr.FindStringSubmatch(row)
+				bnumHigh, err = strconv.Atoi(res[1])
+				bnumLow, err = strconv.Atoi(res[2])
+				if err != nil {
+					return nil, err
+				}
+				s[key] = bitstrreplace.ReplaceAllString(row, "")
+				row = s[key]
+			}
 			split := strings.Split(row, ":")
 			sres = append(sres, fmt.Sprintf("%s AT %%RX0.%v.%v:%s", strings.TrimSpace(split[0]), bnumHigh, bnumLow, strings.TrimSpace(strings.ToUpper(split[1]))))
 			raiseModbusCounter(1, &bnumLow, &bnumHigh)
 		}
 		if strings.Contains(row, "UINT") || strings.Contains(row, "uint") || strings.Contains(row, "WORD") || strings.Contains(row, "word") {
+			if strings.Contains(row, " AT ") && regstr.MatchString(row) {
+				res := regstr.FindStringSubmatch(row)
+				rnum, err = strconv.Atoi(res[1])
+				if err != nil {
+					return nil, err
+				}
+				s[key] = regstrreplace.ReplaceAllString(row, "")
+				row = s[key]
+			}
 			split := strings.Split(row, ":")
 			sres = append(sres, fmt.Sprintf("%s AT %%RW1.%v:%s", strings.TrimSpace(split[0]), rnum, strings.TrimSpace(strings.ToUpper(split[1]))))
 			rnum++

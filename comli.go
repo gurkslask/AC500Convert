@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
+// ExtractDataComli Extracts data from AC500 accessvariables
 func ExtractDataComli(input []string) ([]VARS, error) {
-	// Extracts data from AC500 accessvariables
 
 	//Regexes
 	bitstr := regexp.MustCompile(`^\s*(.*) AT %RX0.(\d*)\.0:\s*(\w*) *;(.*)`)
@@ -66,17 +66,32 @@ func ExtractDataComli(input []string) ([]VARS, error) {
 	//fmt.Println(vars)
 	return vars, nil
 }
+
+// GenerateAccessComli generates access variables in comli protocol
 func GenerateAccessComli(s []string) ([]string, error) {
 	//var res string
 	var sres []string
 	var rnum int = 1
 	var bnum int = 1
+	var regstr = regexp.MustCompile(`AT %RW1\.(\d*)\s*:`)
+	var regstrreplace = regexp.MustCompile(`AT %RW1\.\d*\s*`)
+	var bitstr = regexp.MustCompile(`AT %RX0\.(\d*)\.0\s*:`)
+	var bitstrreplace = regexp.MustCompile(`AT %RX0\.\d*\.0\s*`)
+	var err error
 	//fmt.Println("BEGIN\n", s)
 
-	for _, row := range s {
+	for key, row := range s {
 		//fmt.Println(sres + "\n ENDS HERE")
 		if strings.Contains(row, "BOOL") || strings.Contains(row, "bool") {
-			//fmt.Println("bool")
+			if strings.Contains(row, " AT ") && bitstr.MatchString(row) {
+				res := bitstr.FindStringSubmatch(row)
+				bnum, err = strconv.Atoi(res[1])
+				if err != nil {
+					return nil, err
+				}
+				s[key] = bitstrreplace.ReplaceAllString(row, "")
+				row = s[key]
+			}
 			split := strings.Split(row, ":")
 			//res += fmt.Sprintf("%s AT %%RX0.%v.0:%s\r", split[0], bnum, strings.ToUpper(split[1]))
 			sres = append(sres, fmt.Sprintf("%s AT %%RX0.%v.0:%s", strings.TrimSpace(split[0]), bnum, strings.TrimSpace(strings.ToUpper(split[1]))))
@@ -84,6 +99,15 @@ func GenerateAccessComli(s []string) ([]string, error) {
 		}
 		if strings.Contains(row, "UINT") || strings.Contains(row, "uint") || strings.Contains(row, "WORD") || strings.Contains(row, "word") {
 			//fmt.Println("reg")
+			if strings.Contains(row, " AT ") && regstr.MatchString(row) {
+				res := regstr.FindStringSubmatch(row)
+				rnum, err = strconv.Atoi(res[1])
+				if err != nil {
+					return nil, err
+				}
+				s[key] = regstrreplace.ReplaceAllString(row, "")
+				row = s[key]
+			}
 			split := strings.Split(row, ":")
 			//res += fmt.Sprintf("%s AT %%RW1.%v:%s\r", split[0], rnum, strings.ToUpper(split[1]))
 			sres = append(sres, fmt.Sprintf("%s AT %%RW1.%v:%s", strings.TrimSpace(split[0]), rnum, strings.TrimSpace(strings.ToUpper(split[1]))))
